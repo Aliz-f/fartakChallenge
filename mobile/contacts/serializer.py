@@ -1,8 +1,7 @@
-from dataclasses import field
 from rest_framework import serializers
-from .models import contact
 from django.contrib.auth.models import User
 
+from .models import contact
 class userSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -15,7 +14,6 @@ class contactSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        # user = validated_data('user', None)
         return contact.objects.create(**validated_data)
     
     def update(self, instance, validated_data):

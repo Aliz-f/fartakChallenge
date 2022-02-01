@@ -1,18 +1,14 @@
-from datetime import datetime
-from pydoc import cli, resolve
-from urllib import request
+import json
 from django.test import TestCase
-from rest_framework.test import APIRequestFactory, APITestCase, APIClient
 from django.urls import reverse
-from rest_framework import status
-from requests.auth import HTTPBasicAuth
 from django.contrib.auth.models import User
+from rest_framework.test import APIClient
+from rest_framework import status
 
 from .serializer import contactSerializer
-import json
 from .models import contact
-# Create your tests here.
 
+# Create your tests here.
 class contactTestcase(TestCase):
     def setUp(self):
         self.user = User.objects.create(username='username', password='password')
@@ -74,10 +70,10 @@ class contactTestcase(TestCase):
         client = APIClient()
         client.force_authenticate(user=self.user)
         response = client.get(
-                reverse('contact-id', kwargs={'id': 9000}))
+                reverse('contact-id', kwargs={'id': 85}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND) 
 
-    def testValid_UpdateContact(self):
+    def testValid_updateContact(self):
         client = APIClient()
         client.force_authenticate(user=self.user)
         response = client.put(
@@ -85,7 +81,7 @@ class contactTestcase(TestCase):
                 data=json.dumps(self.validContactUpdate), content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
         
-    def testInValid_UpdateContact(self):
+    def testInValid_updateContact(self):
         client = APIClient()
         client.force_authenticate(user=self.user)
         response = client.put(
@@ -93,7 +89,7 @@ class contactTestcase(TestCase):
                 data=json.dumps(self.inValidContact), content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
     
-    def testValid_CreateContact(self):
+    def testValid_createContact(self):
         client = APIClient()
         client.force_authenticate(user=self.user)
         response = client.post(
@@ -102,7 +98,7 @@ class contactTestcase(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def testInValid_CreateContact(self):
+    def testInValid_createContact(self):
         client = APIClient()
         client.force_authenticate(user=self.user)
         response = client.post(
@@ -111,3 +107,16 @@ class contactTestcase(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
     
+    def testValid_deleteContact(self):
+        client = APIClient()
+        client.force_authenticate(user=self.user)
+        response = client.delete(
+                reverse('contact-id', kwargs={'id': self.contact1.id}))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def testInValid_deleteContact(self):
+        client = APIClient()
+        client.force_authenticate(user=self.user)
+        response = client.delete(
+                reverse('contact-id', kwargs={'id': 85}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

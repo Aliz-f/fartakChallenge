@@ -1,12 +1,9 @@
-from ast import Return
-from os import umask
-import stat
-from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
+
 from .models import contact
 from .serializer import contactSerializer
-from rest_framework import status
 
 # Create your views here.
 class contactlist(APIView):
