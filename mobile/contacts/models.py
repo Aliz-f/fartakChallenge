@@ -9,9 +9,9 @@ class contact(models.Model):
         User,
         on_delete=models.CASCADE
     )
-    firstName = models.CharField(max_length=25, null=True)
-    lastName = models.CharField(max_length=25, null=True)
-    number = models.CharField(max_length=11, null=True)
+    firstName = models.CharField(max_length=25)
+    lastName = models.CharField(max_length=25)
+    number = models.CharField(max_length=11)
     note = models.CharField(max_length=50, null=True, blank=True)
     address = models.CharField(max_length=50, null=True, blank=True)
     birthDate = models.DateField(null=True, blank=True)

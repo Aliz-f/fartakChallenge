@@ -25,4 +25,5 @@ class contactSerializer(serializers.ModelSerializer):
         instance.note = validated_data.get('note')
         instance.address = validated_data.get('address')
         instance.birthDate = validated_data.get('birthDate')
+        instance.save()
         return instance
