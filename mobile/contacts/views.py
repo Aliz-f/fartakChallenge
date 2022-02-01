@@ -1,3 +1,4 @@
+from ast import Return
 from os import umask
 import stat
 from django.shortcuts import get_object_or_404, render
@@ -37,10 +38,20 @@ class contactDetail(APIView):
             return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
     
     def put(self, request, id):
-        contactQ = self.get_object(id)
-        serializerUpdate = contactSerializer(contactQ, data=request.data)
-        if serializerUpdate.is_valid():
-            serializerUpdate.save()
-            return Response(serializerUpdate.data, status= status.HTTP_202_ACCEPTED)
-        return Response(serializerUpdate.errors, status = status.HTTP_400_BAD_REQUEST)
-        
+        try:
+            contactQ = self.get_object(id)
+            serializerUpdate = contactSerializer(contactQ, data=request.data)
+            if serializerUpdate.is_valid():
+                serializerUpdate.save()
+                return Response(serializerUpdate.data, status= status.HTTP_202_ACCEPTED)
+            return Response(serializerUpdate.errors, status = status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, id):
+        try:
+            contactQ = self.get_object(id)
+            contactQ.delete()
+            return Response(status= status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            return Response ({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
